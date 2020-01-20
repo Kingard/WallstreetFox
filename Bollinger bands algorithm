@@ -1,0 +1,14 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+%matplotlib inline
+
+df1 = pd.read_csv('walmart_stock.csv',index_col='Date',parse_dates=True)
+## BOLINGER BANDS
+#20-day MA
+df1['close:20 MA'] = df1['Close'].rolling(20).mean()
+#Upper band
+df1['Upper'] = df1['close:20 MA'] + 2*(df1['Close'].rolling(20).std())
+#Lower band
+df1['Lower'] = df1['close:20 MA'] - 2*(df1['Close'].rolling(20).std())
+df1[['close:20 MA','Upper','Lower','Close']].tail(200).plot(figsize=(16,6))
