@@ -1,0 +1,16 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+data = get_pricing('TSLA',start_date='2012-01-01',end_date='2019-01-01')
+data['tenkan_sen'] = (data['high'].rolling(9).max() + data['low'].rolling(9).min())/2 #Conversion line
+data['kijun_sen'] = (data['high'].rolling(26).max() + data['low'].rolling(26).min())/2 #Base line
+data['senkou_span_a'] = ((data['tenkan_sen'] + data['kijun_sen'])/2).shift(26)
+data['senkou_span_b'] = ((data['high'].rolling(52).max() + data['low'].rolling(52).min() )/2).shift(26)
+data['chikou_span'] = data['close_price'].shift(-26)
+
+data['close_price'].plot(figsize=(14,7),label='close')
+data['senkou_span_a'].plot(figsize=(14,7),label='senkou_span_a',color='red')
+data['senkou_span_b'].plot(figsize=(14,7),label='senkou_span_b',color='green')
+data['chikou_span'].plot(figsize=(14,7),label='chikou_span',color='black',style='--')
+plt.legend();
